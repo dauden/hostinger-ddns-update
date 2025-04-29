@@ -19,7 +19,7 @@ findRecordsByName() {
   # Filter JSON using jq
   RECORD=$(echo "$RECORDS" | jq --arg name "$TARGET_NAME" '.[] | select(.name == $name)')
   if [ "$RECORD" = "" ]; then
-      write_msg "Error: Record ${TARGET_NAME} not found."
+      echo "Error: Record ${TARGET_NAME} not found."
       exit 2
   fi
 }
@@ -29,7 +29,7 @@ getRecords() {
     --silent \
     --header "Authorization: Bearer ${API_KEY}")
   if [ "$RECORDS" = "" ]; then
-      write_msg "Error: Unable to retrieve current records."
+      echo "Error: Unable to retrieve current records."
       exit 2
   fi
 }
@@ -64,11 +64,10 @@ updateRecord() {
 getLastIp() {
   LAST_IP=$(echo "$RECORD" | jq -r '.records[].content')
   if [ "$LAST_IP" = "" ]; then
-      write_msg "Error: Current IP not found from ${ZONE} zone."
+      echo "Error: Current IP not found from ${ZONE} zone."
       exit 2
   fi
 }
-
 
 # Get last known IP address that was stored locally
 if [ -f "$LAST_IP_FILE" ]; then
